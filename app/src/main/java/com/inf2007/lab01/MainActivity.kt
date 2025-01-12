@@ -39,7 +39,7 @@ fun MainScreen() {
     Lab01Theme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
             var username by remember { mutableStateOf("") }
-            var showGreeting by remember { mutableStateOf(false) }
+            var greetingMessage by remember { mutableStateOf("") }
 
             Column(
                 modifier = Modifier
@@ -48,15 +48,19 @@ fun MainScreen() {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // User Input Composable
                 UserInput(
-                    name = name,
-                    onNameChange = { name = it }
+                    name = username,
+                    onNameChange = { username = it }
                 )
 
+                // Submit Button
                 Button(
                     onClick = {
                         if (username.isNotBlank()) {
-                            showGreeting = false
+                            greetingMessage = "Hello $username!, Welcome to INF2007!"
+                        } else {
+                            greetingMessage = ""
                         }
                     },
                     modifier = Modifier
@@ -66,14 +70,14 @@ fun MainScreen() {
                     Text("Submit")
                 }
 
-                if (showGreeting) {
-                    Greeeting(
-                        name = username,
+                // Greeting Message
+                if (greetingMessage.isNotBlank()) {
+                    Greeting(
+                        message = greetingMessage,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 16.dp)
                     )
-
                 }
             }
         }
@@ -88,17 +92,17 @@ fun UserInput(name: String, onNameChange: (String) -> Unit, modifier: Modifier =
         label = { Text("Enter your Name") },
         modifier = modifier
             .fillMaxWidth()
-            .testTag("UserInput")
+            .testTag("nameInput")
     )
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(message: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $username!, Welcome to InF2007!",
-        modifier = Modifier
+        text = message,
+        modifier = modifier
             .fillMaxWidth()
-            .testTag("greeting")
+            .testTag("greetingMsg")
     )
 }
 
